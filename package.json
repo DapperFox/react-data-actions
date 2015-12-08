@@ -1,0 +1,56 @@
+{
+  "name": "react-data",
+  "version": "0.0.1",
+  "description": "React data managers.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "eslint src",
+    "prepublish": "npm run clean && npm run build",
+    "clean": "rimraf lib dist",
+    "build": "npm run build:lib && npm run build:umd",
+    "build:lib": "babel src/ -d lib",
+    "build:umd": "webpack src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nuvi/react-data.git"
+  },
+  "keywords": [
+    "react",
+    "data",
+    "flux"
+  ],
+  "author": "support@inlineblock.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nuvi/react-data/issues"
+  },
+  "homepage": "https://github.com/nuvi/react-data#readme",
+  "dependencies": {
+    "babel-plugin-transform-runtime": "^6.3.13",
+    "lodash": "^3.10.1",
+    "react": "^0.14.3",
+    "redux": "^3.0.4",
+    "whatwg-fetch": "^0.10.1"
+  },
+  "devDependencies": {
+    "babel": "^6.3.13",
+    "babel-core": "^6.2.1",
+    "babel-eslint": "^4.1.6",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-transform-class-properties": "^6.3.13",
+    "babel-plugin-transform-decorators-legacy": "^1.1.0",
+    "babel-plugin-transform-object-assign": "^6.3.13",
+    "babel-preset-es2015": "^6.0.15",
+    "babel-preset-react": "^6.0.15",
+    "babel-preset-stage-0": "^6.0.15",
+    "css-loader": "^0.21.0",
+    "eslint": "^1.10.0",
+    "eslint-config-airbnb": "^1.0.0",
+    "eslint-plugin-react": "^3.10.0",
+    "file-loader": "^0.8.5",
+    "react-dom": "^0.14.3",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.2"
+  }
+}
