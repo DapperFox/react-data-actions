@@ -4,32 +4,44 @@ import {
   buildRequestPath,
   createInitialFetchState,
   existingStateForKey,
+  headersFromResponse,
   isStateFetching,
   isStateStale,
   stateKeyFromOptions,
   updateShowStateForOptions,
 } from '../helpers/';
 
+function processResponseFailure (response, dataManager, options, id) {
+  const headers = headersFromResponse(response);
+  updateShowStateForOptions(dataManager, {
+    data: undefined,
+    fetchDate: new Date(),
+    hasError: true,
+    isFetching: false,
+    status: response.status,
+    statusText: response.statusText,
+    headers: headers,
+  }, options, id);
+}
 
 async function processResponse (response, dataManager, options, id) {
-  const responseJSON = await response.json();
-  if (response.ok) {
-    updateShowStateForOptions(dataManager, {
-      data: responseJSON,
-      fetchDate: new Date(),
-      hasError: false,
-      isFetching: false,
-      status: response.status,
-    }, options, id);
-  } else {
-    updateShowStateForOptions(dataManager, {
-      data: undefined,
-      fetchDate: new Date(),
-      hasError: true,
-      isFetching: false,
-      status: response.status,
-      statusText: response.statusText,
-    }, options, id);
+  try {
+    const responseJSON = await response.json();
+    if (response.ok) {
+      const headers = headersFromResponse(response);
+      updateShowStateForOptions(dataManager, {
+        data: responseJSON,
+        fetchDate: new Date(),
+        hasError: false,
+        isFetching: false,
+        status: response.status,
+        headers: headers,
+      }, options, id);
+    } else {
+      processResponseFailure(response, dataManager, options, id);
+    }
+  } catch (e) {
+    processResponseFailure(response, dataManager, options, id);
   }
 }
 

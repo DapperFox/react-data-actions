@@ -27,25 +27,40 @@ class Inner extends React.Component {
       user: usersActions.showAction({
         id: props.id,
       }),
-      deleteAction: usersActions.deleteAction(),
+      deleteAction: usersActions.deleteAction({
+        waitFor:false,
+        invalidate: true
+      }),
       updateAction: usersActions.updateAction(),
     };
   }
 
   onDelete () {
+    this.setState({error: false});
     this.props.deleteAction({ id: this.props.id }).catch(() => {
     });
   }
 
   onUpdate () {
+    this.setState({error: false});
     this.props.updateAction({ id: this.props.id, name: 'jane' }).catch(() => {
+      this.setState({error: true});
     });
   }
 
   render () {
     return (
-      <div>{ this.renderUser() }</div>
+      <div className="hey">
+        <div>{ this.renderUser() }</div>
+        { this.renderError() }
+      </div>
     );
+  }
+
+  renderError () {
+    if (this.state && this.state.error) {
+      return <div>has error { this.state.errorMessage }</div>;
+    }
   }
 
   renderUser () {
@@ -135,6 +150,7 @@ class Page extends React.Component {
 
   renderUsers () {
     if (this.props.users.data) {
+      console.log(this.props.users);
       return this.props.users.data.map((user) => {
         return <li key={user.id}>{ user.name }<Inner id={ user.id } /></li>;
       });

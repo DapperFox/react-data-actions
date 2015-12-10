@@ -1,5 +1,4 @@
 import {
-  buildRequestPath,
   stateKeyFromOptions,
   updateShowStateForOptions,
   updateIndexStateForOptions,

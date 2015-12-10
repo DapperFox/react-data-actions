@@ -1,6 +1,11 @@
-import React from "react";
+import React from 'react';
 
 class DataProvider extends React.Component {
+
+  static propTypes = {
+    dataManager: React.PropTypes.object.isRequired,
+    children: React.PropTypes.node,
+  }
 
   constructor (props, context) {
     super(props, context);
@@ -9,21 +14,21 @@ class DataProvider extends React.Component {
 
   getChildContext () {
     return {
-      dataManager: this.dataManager
+      dataManager: this.dataManager,
     };
   }
 
   render () {
-    var children = this.props.children;
+    let children = this.props.children;
     if (typeof children === 'function') {
       children = children();
     }
     return React.Children.only(children);
   }
-};
+}
 
 DataProvider.childContextTypes = {
-  dataManager: React.PropTypes.object.isRequired
+  dataManager: React.PropTypes.object.isRequired,
 };
 
 export default DataProvider;

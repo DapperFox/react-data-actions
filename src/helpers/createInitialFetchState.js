@@ -5,5 +5,6 @@ export default function createInitialFetchState (currentState = {}) {
     hasError: false,
     isFetching: true,
     status: -1,
+    headers: undefined,
   });
 }

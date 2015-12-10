@@ -27,15 +27,26 @@ function processAddition (modelData, dataManager, options) {
 }
 
 function performRequest (data, dataManager, options) {
-  const fetchURL = buildRequestPath(options);
-  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
-    method: 'POST',
-    body: JSON.stringify(data),
-  })).then((response) => {
-    if (response.ok) {
-      const modelData = response.json();
-      processAddition(modelData || data, dataManager, options);
-    }
+  return new Promise((resolve, reject) => {
+    const fetchURL = buildRequestPath(options);
+    return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })).then((response) => {
+      try {
+        if (response.ok) {
+          const modelData = response.json();
+          processAddition(modelData || data, dataManager, options);
+          resolve(response, modelData);
+        } else {
+          reject(response);
+        }
+      } catch (e) {
+        reject(response);
+      }
+    }).catch((response) => {
+      reject(response);
+    });
   });
 }
 

@@ -1,5 +1,4 @@
 import 'whatwg-fetch';
-import _ from 'lodash';
 import {
   indexAction,
   showAction,

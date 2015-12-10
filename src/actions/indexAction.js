@@ -2,10 +2,11 @@ import 'whatwg-fetch';
 import _ from 'lodash';
 import { getFetchConfiguration } from '../configureFetch';
 import {
-  buildRequestPath,
   buildCacheKeyFromOptions,
+  buildRequestPath,
   createInitialFetchState,
   existingStateForKey,
+  headersFromResponse,
   isStateFetching,
   isStateStale,
   stateKeyFromOptions,
@@ -14,40 +15,52 @@ import {
   updateShowStateForOptions,
 } from '../helpers/';
 
+function processResponseFailure (response, dataManager, options) {
+  const headers = headersFromResponse(response);
+  updateIndexStateForOptions(dataManager, {
+    data: undefined,
+    isFetching: false,
+    hasError: true,
+    fetchDate: new Date(),
+    status: response.status,
+    statusText: response.statusText,
+    headers: headers,
+  }, options);
+}
 
 async function processResponse (response, dataManager, options) {
-  const responseJSON = await response.json();
-  if (response.ok) {
-    if (_.isArray(responseJSON)) {
-      responseJSON.forEach((mo) => {
-        const id = mo[options.idAttribute || 'id'];
-        if (id) {
-          updateShowStateForOptions(dataManager, {
-            data: mo,
-            isFetching: false,
-            hasError: false,
-            fetchDate: new Date(),
-            status: response.status,
-          }, options, id, true);
-        }
-      });
+  try {
+    const responseJSON = await response.json();
+    if (response.ok) {
+      const headers = headersFromResponse(response);
+      if (_.isArray(responseJSON)) {
+        responseJSON.forEach((mo) => {
+          const id = mo[options.idAttribute || 'id'];
+          if (id) {
+            updateShowStateForOptions(dataManager, {
+              data: mo,
+              isFetching: false,
+              hasError: false,
+              fetchDate: new Date(),
+              status: response.status,
+              headers: headers,
+            }, options, id, true);
+          }
+        });
+      }
+      updateIndexStateForOptions(dataManager, {
+        data: responseJSON,
+        isFetching: false,
+        hasError: false,
+        fetchDate: new Date(),
+        status: response.status,
+        headers: headers,
+      }, options);
+    } else {
+      processResponseFailure(response, dataManager, options);
     }
-    updateIndexStateForOptions(dataManager, {
-      data: responseJSON,
-      isFetching: false,
-      hasError: false,
-      fetchDate: new Date(),
-      status: response.status,
-    }, options);
-  } else {
-    updateIndexStateForOptions(dataManager, {
-      data: undefined,
-      isFetching: false,
-      hasError: true,
-      fetchDate: new Date(),
-      status: response.status,
-      statusText: response.statusText,
-    }, options);
+  } catch (e) {
+    processResponseFailure(response, dataManager, options);
   }
 }
 

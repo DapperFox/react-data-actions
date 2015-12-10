@@ -50,17 +50,28 @@ function processUpdate (id, modelData, options, dataManager) {
 }
 
 function performRequest (id, modelData, options, dataManager) {
-  const fetchURL = buildRequestPath(options, id);
-  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
-    method: 'PUT',
-    body: JSON.stringify(modelData),
-  })).then((response) => {
-    if (response.ok) {
-      const newModelData = response.json();
-      if (options.waitFor) {
-        processUpdate(id, newModelData || modelData, options, dataManager);
+  return new Promise((resolve, reject) => {
+    const fetchURL = buildRequestPath(options, id);
+    return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+      method: 'PUT',
+      body: JSON.stringify(modelData),
+    })).then((response) => {
+      try {
+        if (response.ok) {
+          const newModelData = response.json();
+          if (options.waitFor) {
+            processUpdate(id, newModelData || modelData, options, dataManager);
+          }
+          resolve(response, modelData);
+        } else {
+          reject(response);
+        }
+      } catch (e) {
+        reject(response);
       }
-    }
+    }).catch((response) => {
+      reject(response);
+    });
   });
 }
 

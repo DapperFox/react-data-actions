@@ -2,6 +2,7 @@ export buildCacheKeyFromOptions from './buildCacheKeyFromOptions';
 export buildRequestPath from './buildRequestPath';
 export createInitialFetchState from './createInitialFetchState';
 export existingStateForKey from './existingStateForKey';
+export headersFromResponse from './headersFromResponse';
 export isStateFetching from './isStateFetching';
 export isStateStale from './isStateStale';
 export stateKeyFromOptions from './stateKeyFromOptions';
