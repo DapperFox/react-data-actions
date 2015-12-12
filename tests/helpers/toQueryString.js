@@ -1,7 +1,7 @@
 import expect from 'expect';
 import toQueryString from '../../src/helpers/toQueryString';
 
-describe('toQueryString', function () {
+describe('#toQueryString', function () {
   it('should encode nothing to an empty string', function () {
     expect(toQueryString()).toEqual('');
   });
