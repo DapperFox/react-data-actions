@@ -1,5 +1,5 @@
-export default function isStateStale (state, options) {
-  if (!state) {
+export default function isStateStale (state = {}, options = {}) {
+  if (!state || !state.fetchDate) {
     return true;
   }
 

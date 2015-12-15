@@ -5,11 +5,10 @@ export default function headersFromResponse (response) {
     const key = pair[0];
     const value = pair[1];
     if (headers[key]) {
-      if (_.isArray(headers[key])) {
-        headers[key].push(value);
-      } else {
+      if (!_.isArray(headers[key])) {
         headers[key] = [headers[key]];
       }
+      headers[key].push(value);
     } else {
       headers[key] = value;
     }
