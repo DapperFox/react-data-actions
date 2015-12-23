@@ -5,7 +5,7 @@
 
 React Data Actions is a tool for helping you get remote data to your components. No more componentDidMount requests. No more setting state.
 
-Out of the box support for show, index, delete, update, and invalidation calls.
+Out of the box support for show, index, create, delete, update, and invalidation calls.
 
 ## Why
 
