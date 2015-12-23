@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom';
 
 import { configureFetch, connect, DataProvider, DataManager, dataActionsGenerator } from '../src/';
 configureFetch({
-  baseName: 'examples',
   headers: {
     'X-Daddy-warbucks': 'queen'
   }
 });
 const usersActions = dataActionsGenerator({
-  path: 'users',
+  path: 'examples/users',
   extension: 'json',
   waitFor: false,
 });
