@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-function connect (WrappedComponent) {
+export default function connect (WrappedComponent) {
   class ConnectedComponent extends React.Component {
 
     constructor (props, context) {
@@ -90,5 +90,3 @@ function connect (WrappedComponent) {
   };
   return ConnectedComponent;
 }
-
-export default connect;
