@@ -1,8 +1,8 @@
 {
   "name": "react-data-actions",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React data managers.",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "npm run lint && npm run karma",
     "lint": "eslint src",
