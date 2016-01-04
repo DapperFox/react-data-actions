@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-function connectComponent (WrappedComponent) {
+function connect (WrappedComponent) {
   class ConnectedComponent extends React.Component {
 
     constructor (props, context) {
@@ -72,7 +72,7 @@ function connectComponent (WrappedComponent) {
     }
 
     render () {
-      return <WrappedComponent { ...this.props } { ...this.state } />;
+      return <WrappedComponent ref="connectedComponent" { ...this.props } { ...this.state } />;
     }
 
     updateDataRequirements (nextProps) {
@@ -84,15 +84,11 @@ function connectComponent (WrappedComponent) {
       return false;
     }
   }
-
+  ConnectedComponent.displayName = `connect(${WrappedComponent.displayName || WrappedComponent.name})`;
   ConnectedComponent.contextTypes = {
     dataManager: React.PropTypes.object.isRequired,
   };
   return ConnectedComponent;
 }
 
-function connect (WrappedComponent) {
-  return connectComponent(WrappedComponent);
-}
-
-export { connect, connectComponent };
+export default connect;
