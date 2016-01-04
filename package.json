@@ -1,6 +1,6 @@
 {
   "name": "react-data-actions",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "React data managers.",
   "main": "lib/index.js",
   "scripts": {
@@ -12,6 +12,9 @@
     "build": "npm run build:lib",
     "build:lib": "babel src/ -d lib"
   },
+  "files": [
+    "lib/"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nuvi/react-data-actions.git"
