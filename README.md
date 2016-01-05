@@ -102,3 +102,227 @@ So as the requests are happeing, your ConnectedComponent (like AuthorsList) will
 You can do a default if you do an indexAction(), if the response is an array of models, data-actions-generator will cache every model by the idAttribute (which defaults to 'id') so if you do a showAction({ id: 3 }) and a previously completed indexAction has that ID, it wont do a request for it.
 
 
+## More Examples
+
+##### Create
+
+```js
+# CreateAuthorsForm.js
+
+import authorsActions from 'authorsActions';
+import React from 'react';
+import { connect } from 'react-data-actions';
+
+class CreateAuthorsForm extends React.Component {
+  static propTypes = {
+    createAuthor: React.PropTypes.func.isRequired,
+    onComplete: React.PropTypes.func.isRequired,
+  }
+  
+  static connectedActions (props) {
+    return {
+      createAuthor: authorsActions.createAction(),
+    }
+  }
+  
+  onSubmit (evt) {
+    evt.preventDefault();
+    const name = this.refs.name.value; // React 1.4 allows dom elements to not need ReactDOM.findDOMNode
+    if (name) {
+      this.createAuthorWithName(name);
+    } else {
+      this.setState({
+        errorMessage: 'Authors name cannot be empty',
+      });
+    }
+  }
+
+  render () {
+    return (
+      <form onSubmit={ ::this.onSubmit }>
+        { this.renderError() }
+        <input name="name" ref="name" />
+        <button type="submit">Create Author</button>
+      </form>
+    );
+  }
+  
+  renderError () {
+    if (this.state.errorMessage) {
+      return <div className="error">{ this.state.errorMessage }</div>;
+    }
+  }
+  
+  createAuthorWithName (name) {
+    this.props.createAuthor({
+      name,
+      timestamp: new Date().getTime(),
+    }).then((model) => {
+      if (this.props.onComplete) {
+        this.props.onComplete(model);
+      }
+    }).catch((request) => {
+      this.setState({
+        errorMessage: `Request failed: ${request.status}`,
+      });
+    });
+  }
+}
+
+export default connect(CreateAuthorsForm);
+```
+
+
+
+
+##### Update
+
+This will cascade to any other view when its done updating.
+
+```js
+# UpdateAuthorForm.js
+
+import authorsActions from 'authorsActions';
+import React from 'react';
+import { connect } from 'react-data-actions';
+
+class UpdateAuthorForm extends React.Component {
+  static propTypes = {
+    author: React.PropTypes.object.isRequired, // the current other model
+    updateAuthor: React.PropTypes.func.isRequired, // the connected action
+    onComplete: React.PropTypes.func.isRequired, // the onComplete call back
+  }
+  
+  static connectedActions (props) {
+    return {
+      updateAuthor: authorsActions.updateAction(),
+    }
+  }
+  
+  constructor (props, context) {
+    super(props, context);
+    this.state = {
+      name: props.author.name, // i'm handed an author, so lets just use the name
+    };
+  }
+  
+  componentWillReceiveProps (props) {
+    if (props.author) {
+      this.setState({
+        name: props.author.name, // i'm handed an author again
+      });
+    }
+  }
+  
+  onChange (evt) {
+    this.setState({
+      name: this.refs.name.value,
+    });
+  }
+  
+  onSubmit (evt) {
+    evt.preventDefault();
+    if (this.state.name) {
+      this.performUpdateRequest();
+    } else {
+      this.setState({
+        errorMessage: 'Authors name cannot be empty',
+      });
+    }
+  }
+
+  render () {
+    return (
+      <form onSubmit={ ::this.onSubmit }>
+        { this.renderError() }
+        <input name="name" ref="authorsName" value={ this.state.name } />
+        <button type="submit">Update Author</button>
+      </form>
+    );
+  }
+  
+  renderError () {
+    if (this.state.errorMessage) {
+      return <div className="error">{ this.state.errorMessage }</div>;
+    }
+  }
+  
+  updateAuthorWithName () {
+    // Since we pass in the entire object for this.props.author, it will read its id attribute and figure where to update it.
+    this.props.updateAuthor(Object.assign({}, this.props.author, {
+      name: this.state.name,
+    }).then((model) => {
+      if (this.props.onComplete) {
+        this.props.onComplete(model);
+      }
+    }).catch((request) => {
+      this.setState({
+        errorMessage: `Request failed: ${request.status}`,
+      });
+    });
+  }
+}
+
+export default connect(UpdateAuthorForm);
+```
+
+##### Invalidation
+
+This example is an index invalidation. so assume its a force refresh.
+
+```js
+# AuthorsList.js
+
+import authorsActions from 'authorsActions';
+import React from 'react';
+import { connect } from 'react-data-actions';
+
+class AuthorsList extends React.Component {
+  static connectedActions (props) {
+    return {
+      authors: authorsActions.indexAction({
+        where: { // this will become query string stuff on an index, so /authors?is_active=1
+          is_active: true
+        }
+      }),
+      forceRefreshAuthors: authorsActions.invalidateIndexAction({
+        where: { // we need our where clause to match the one above, if you want to do all index do invalidateAllAction or invalidateShowAction ... then pass it object you want invalidated or a stub with its idAttribute filled (e.g. {id: 3})
+          is_active: true
+        }
+      }),
+    }
+  }
+  
+  onButtonClick (evt) {
+    // Notice that this page still has a requirement for this data,
+    // so once this invalidation is done, this view __WILL__ refetch the data.
+    this.props.forceRefreshAuthors();
+  }
+
+  render () {
+    if (this.props.authors.isFetching) {
+      // show loader
+      return <img src="spinner.gif" />
+    } else if (this.props.authors.hasError) {
+      // show errors
+      return <div className="error">{ this.props.authors.errorMessage }</div>;
+    } else {
+      const data = this.props.authors.data; // the result of the resposse
+      return (
+        <ul>
+          { this.renderAuthorsList(data) }
+        </ul>
+        <button onClick={ ::this.onButtonClick }>FORCE REFRESH ME</button>
+      );
+    }
+  }
+  
+  renderList (data) {
+    return data.map((author) => {
+      return <div className="author">{ author.name }</div>;
+    });
+  }
+}
+
+export default connect(AuthorsList);
+```
