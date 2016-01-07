@@ -7,6 +7,8 @@ React Data Actions is a tool for helping you get remote data to your components.
 
 Out of the box support for show, index, create, delete, update, and invalidation state calls.
 
+It also has use for simple state storage for stuff that does not use a backend.
+
 ## Why
 
 This helped us remove about 40% of code for certain top-level views. It also prevented multiple requests for data, like if you sidebar needs the list of something and the view itself does too.
@@ -325,4 +327,44 @@ class AuthorsList extends React.Component {
 }
 
 export default connect(AuthorsList);
+```
+
+
+### Non-backend data
+
+Use `actionsGenerator` for simple state stuff. Just don't forget if you are storing an object or array, to clone it or use something immutable.
+
+```js
+// dateRangeActions.js
+
+import { actionsGenerator } from 'react-data-actions';
+
+export default actionsGenerator({
+  name: 'blob', // optional
+  maxAge: 30000, // millisecond, optional, by default its forever
+});
+
+```
+
+```js
+// Page.js
+
+import dateRangeActions from 'dateRangeActions';
+import { connect } from 'react-data-actions';
+import React from 'react';
+
+class Page extends React.Component {
+
+  static connectedActions () {
+    return {
+      setDateRange: dateRangeActions.setAction(),// this.props.setDateRange is a setter function
+      dateRange: dateRangeActions.getAction(), // this.props.dateRange is the state value, not a getter
+    }
+  }
+
+  render () {
+    return <div>{ this.props.dateRange }</div>;
+  }
+}
+export default connect(Page);
 ```

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {
   isStateStale,
-} from 'helpers/';
+} from './helpers/';
 
 class SimpleActionsGeneratorGenerator {
   constructor (o = {}) {
