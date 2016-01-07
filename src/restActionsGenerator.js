@@ -10,7 +10,7 @@ import {
   invalidateShowAction,
 } from './actions/';
 
-class RestActionsGenerator {
+class RestActionsGeneratorGenerator {
   constructor (o) {
     this.memoized = {};
     this.isBatchProcessing = false;
@@ -113,6 +113,6 @@ class RestActionsGenerator {
   }
 }
 
-export default function dataActionsGenerator (config) {
-  return new RestActionsGenerator(config); // i can use new if i want to.
+export default function restActionsGenerator (config) {
+  return new RestActionsGeneratorGenerator(config); // i can use new if i want to.
 }

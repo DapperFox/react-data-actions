@@ -5,7 +5,11 @@ class DataProvider extends React.Component {
   static propTypes = {
     dataManager: React.PropTypes.object.isRequired,
     children: React.PropTypes.node,
-  }
+  };
+
+  static childContextTypes = {
+    dataManager: React.PropTypes.object.isRequired,
+  };
 
   constructor (props, context) {
     super(props, context);
@@ -26,9 +30,5 @@ class DataProvider extends React.Component {
     return React.Children.only(children);
   }
 }
-
-DataProvider.childContextTypes = {
-  dataManager: React.PropTypes.object.isRequired,
-};
 
 export default DataProvider;

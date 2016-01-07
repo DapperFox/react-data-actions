@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { configureFetch, connect, DataProvider, DataManager, dataActionsGenerator } from '../src/';
+import { configureFetch, connect, DataProvider, DataManager, restActionsGenerator } from '../src/';
 configureFetch({
   headers: {
-    'X-Daddy-warbucks': 'queen'
-  }
+    'X-Daddy-warbucks': 'queen',
+  },
 });
-const usersActions = dataActionsGenerator({
+const usersActions = restActionsGenerator({
   path: 'examples/users',
   extension: 'json',
   waitFor: false,
@@ -19,7 +19,7 @@ class Inner extends React.Component {
     id: React.PropTypes.number.isRequired,
     deleteAction: React.PropTypes.func.isRequired,
     updateAction: React.PropTypes.func.isRequired,
-  }
+  };
 
   static connectedActions (props) {
     return {
@@ -27,23 +27,29 @@ class Inner extends React.Component {
         id: props.id,
       }),
       deleteAction: usersActions.deleteAction({
-        waitFor:false,
-        invalidate: true
+        waitFor: false,
+        invalidate: true,
       }),
       updateAction: usersActions.updateAction(),
     };
   }
 
   onDelete () {
-    this.setState({error: false});
+    this.setState({
+      error: false,
+    });
     this.props.deleteAction({ id: this.props.id }).catch(() => {
     });
   }
 
   onUpdate () {
-    this.setState({error: false});
+    this.setState({
+      error: false,
+    });
     this.props.updateAction({ id: this.props.id, name: 'jane' }).catch(() => {
-      this.setState({error: true});
+      this.setState({
+        error: true,
+      });
     });
   }
 
@@ -71,10 +77,16 @@ class Inner extends React.Component {
 }
 Inner = connect(Inner);
 
+/* eslint-disable react/no-multi-comp */
 class Page extends React.Component {
   static propTypes = {
     users: React.PropTypes.object.isRequired,
-  }
+    addUser: React.PropTypes.func.isRequired,
+    invalidateAll: React.PropTypes.func.isRequired,
+    invalidateShow: React.PropTypes.func.isRequired,
+    invalidateIndex: React.PropTypes.func.isRequired,
+    invalidateIndexNoWhere: React.PropTypes.func.isRequired,
+  };
 
   static connectedActions () {
     return {
@@ -105,7 +117,9 @@ class Page extends React.Component {
       name: new Date().getTime() + ' other user',
     });
     this.setState({
-      users: (this.state && this.state.users || []).concat([{id: id}]),
+      users: (this.state && this.state.users || []).concat([{
+        id: id,
+      }]),
     });
   }
 
@@ -113,20 +127,17 @@ class Page extends React.Component {
     this.props.invalidateAll();
   }
 
-  
   onInvalidateShow () {
     this.props.invalidateShow({
       id: 1,
     });
   }
 
-  
   onInvalidateIndex () {
     this.props.invalidateIndex({
     });
   }
 
-  
   onInvalidateIndexNowhere () {
     this.props.invalidateIndexNoWhere({
     });
@@ -149,7 +160,6 @@ class Page extends React.Component {
 
   renderUsers () {
     if (this.props.users.data) {
-      console.log(this.props.users);
       return this.props.users.data.map((user) => {
         return <li key={user.id}>{ user.name }<Inner id={ user.id } /></li>;
       });

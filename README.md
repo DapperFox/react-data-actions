@@ -43,9 +43,9 @@ Let's make a list of all the Authors
 ```js
 # authorsActions.js
 
-import { dataActionsGenerator } from 'react-data-actions';
+import { restActionsGenerator } from 'react-data-actions';
 
-export default dataActionsGenerator({
+export default restActionsGenerator({
   path: 'authors',
   idAttribute: 'id', // its defaulted to id
   maxAge: 60000 // milliseconds, defautls to a day
