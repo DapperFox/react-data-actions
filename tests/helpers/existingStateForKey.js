@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 describe('#existingStateForKey', () => {
   beforeEach(function () {
-    this.dataManager = DataManager.getInstance();
+    this.dataManager = new DataManager();
   });
   it('should return an object when key value is empty', function () {
     const state = existingStateForKey(this.dataManager, 'blah');

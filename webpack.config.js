@@ -9,7 +9,7 @@ module.exports = {
   resolve: {
     modulesDirectories: ['node_modules'],
     extensions: ['', '.js'],
-    root: [path.resolve(__dirname, "src/")],
+    root: [path.resolve(__dirname, 'src/')],
   },
   eslint: {
     configFile: path.resolve(__dirname, '.eslintrc'),
@@ -17,7 +17,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        loader: 'babel',
+        loader: 'babel-loader',
         test: /\.js$/,
         exclude: /node_modules/,
       },

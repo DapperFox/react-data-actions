@@ -1,17 +1,24 @@
 // Karma configuration
 // Generated on Sat Dec 12 2015 12:19:51 GMT-0700 (MST)
 
-module.exports = function(config) {
+const path = require('path');
+module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['mocha'],
     files: [
-      'karma.webpack.config.js'
+      'karma.webpack.config.js',
     ],
     exclude: [
     ],
+    plugins: [
+      'karma-mocha',
+      'karma-phantomjs-launcher',
+      'karma-sourcemap-loader',
+      'karma-webpack',
+    ],
     preprocessors: {
-      'karma.webpack.config.js': [ 'webpack', 'sourcemap' ] //preprocess with webpack and our sourcemap loader
+      'karma.webpack.config.js': ['webpack', 'sourcemap'], // preprocess with webpack and our sourcemap loader
     },
     reporters: ['progress'],
     port: 9876,
@@ -29,11 +36,11 @@ module.exports = function(config) {
     // how many browser should be started simultanous
     concurrency: Infinity,
     webpack: {
-      devtool: 'inline-source-map', //just do inline source maps instead of the default
+      devtool: 'inline-source-map', // just do inline source maps instead of the default
       module: {
         loaders: [
           {
-            loader: 'babel',
+            loader: 'babel-loader',
             test: /\.js$/,
             exclude: /node_modules/,
           },
@@ -42,10 +49,11 @@ module.exports = function(config) {
       resolve: {
         modulesDirectories: ['node_modules'],
         extensions: ['', '.js'],
-        root: ['src/'],
+        root: [path.resolve(__dirname, 'src/')],
       },
     },
     webpackServer: {
-    }
-  })
-}
+      noInfo: true,
+    },
+  });
+};

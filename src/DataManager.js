@@ -38,10 +38,12 @@ export default class DataManager {
     return this.state[key];
   }
 
-  setStateForKey (state, key, skipDispatch) {
-    this.state[key] = state;
-    if (!skipDispatch) {
-      this.dispatch(key);
+  setStateForKey (state, key, skipDispatch = false) {
+    if (this.state[key] !== state) {
+      this.state[key] = state;
+      if (!skipDispatch) {
+        this.dispatch(key);
+      }
     }
   }
 }
