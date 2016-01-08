@@ -5,5 +5,5 @@ export default function updateShowStateForOptions (dataManager, newShowState, op
   const key = stateKeyFromOptions(options);
   const state = existingStateForKey(dataManager, key);
   state.byId[id] = newShowState;
-  dataManager.setStateForKey(state, key, silent);
+  dataManager.setStateForKey(Object.assign({}, state), key, silent);
 }

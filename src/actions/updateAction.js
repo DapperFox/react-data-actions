@@ -38,7 +38,7 @@ function cascadeUpdate (id, modelData, options, dataManager) {
       }
     }
   }
-  dataManager.setStateForKey(states, stateKey);
+  dataManager.setStateForKey(Object.assign({}, states), stateKey);
 }
 
 function processUpdate (id, modelData, options, dataManager) {

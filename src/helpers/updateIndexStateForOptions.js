@@ -7,5 +7,5 @@ export default function updateIndexStateForOptions (dataManager, newIndexState, 
   const state = existingStateForKey(dataManager, stateKey);
   const whereKey = buildCacheKeyFromOptions(options);
   state.byWhere[whereKey] = newIndexState;
-  dataManager.setStateForKey(state, stateKey, silent);
+  dataManager.setStateForKey(Object.assign({}, state), stateKey, silent);
 }

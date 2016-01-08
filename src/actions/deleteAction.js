@@ -30,7 +30,7 @@ function cascadeDeletion (id, options, dataManager) {
       }
     }
   }
-  dataManager.setStateForKey(states, stateKey);
+  dataManager.setStateForKey(Object.assign({}, states), stateKey);
 }
 
 function processDeletion (id, options, dataManager) {

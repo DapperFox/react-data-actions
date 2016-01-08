@@ -84,7 +84,7 @@ export default function indexAction (dataManager, options) {
     // so its stale or not there, fetch it.
     currentState = createInitialFetchState(currentState);
     updateIndexStateForOptions(dataManager, currentState, options);
-    processRequestForData(dataManager, options, currentState); // this returns a new state
+    processRequestForData(dataManager, options);
   }
   return currentState;
 }
