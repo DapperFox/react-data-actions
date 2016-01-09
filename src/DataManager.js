@@ -1,6 +1,8 @@
+import _ from 'lodash';
 export default class DataManager {
 
   constructor () {
+    this.uniqueId = _.uniqueId('DataManager');
     this.listeners = [];
     this.state = {};
     this.isDispatching = false;

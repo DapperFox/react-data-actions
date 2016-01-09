@@ -5,6 +5,8 @@ export existingStateForKey from './existingStateForKey';
 export headersFromResponse from './headersFromResponse';
 export isStateFetching from './isStateFetching';
 export isStateStale from './isStateStale';
+export memoizeAction from './memoizeAction';
+export shallowCompareProps from './shallowCompareProps';
 export stateKeyFromOptions from './stateKeyFromOptions';
 export toQueryString from './toQueryString';
 export updateIndexStateForOptions from './updateIndexStateForOptions';

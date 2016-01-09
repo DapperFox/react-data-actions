@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {
   isStateStale,
+  memoizeAction,
 } from './helpers/';
 
 class SimpleActionsGeneratorGenerator {
@@ -27,29 +28,35 @@ class SimpleActionsGeneratorGenerator {
   }
 
   setAction () {
-    return (dataManager) => {
-      return (newValue, silent = false) => {
-        const state = dataManager.getStateForKey(this.key);
-        if (!state || state.value !== newValue) {
-          dataManager.setStateForKey({
-            fetchDate: new Date(),
-            value: newValue,
-          }, this.key, silent);
-          return true;
-        }
-        return false;
-      };
-    };
+    if (!this.cachedSetAction) {
+      this.cachedSetAction = memoizeAction((dataManager) => {
+        return (newValue, silent = false) => {
+          const state = dataManager.getStateForKey(this.key);
+          if (!state || state.value !== newValue) {
+            dataManager.setStateForKey({
+              fetchDate: new Date(),
+              value: newValue,
+            }, this.key, silent);
+            return true;
+          }
+          return false;
+        };
+      });
+    }
+    return this.cachedSetAction;
   }
 
   clearAction () {
-    return (dataManager) => {
-      return (silent = false) => {
-        if (dataManager.getStateForKey(this.key) !== undefined) {
-          dataManager.setStateForKey(undefined, this.key, silent);
-        }
-      };
-    };
+    if (!this.cachedClearAction) {
+      this.cachedClearAction = memoizeAction((dataManager) => {
+        return (silent = false) => {
+          if (dataManager.getStateForKey(this.key) !== undefined) {
+            dataManager.setStateForKey(undefined, this.key, silent);
+          }
+        };
+      });
+    }
+    return this.cachedClearAction;
   }
 }
 export default function actionsGenerator (name) {

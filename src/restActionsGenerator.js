@@ -9,10 +9,13 @@ import {
   invalidateIndexAction,
   invalidateShowAction,
 } from './actions/';
+import {
+  memoizeAction,
+} from './helpers/';
 
 class RestActionsGeneratorGenerator {
   constructor (o) {
-    this.memoized = {};
+    this.generatedFunctions = {};
     this.isBatchProcessing = false;
     this.config = Object.assign({
       waitFor: true,
@@ -20,24 +23,24 @@ class RestActionsGeneratorGenerator {
     }, o || {}); // why clone? cause of the where clause object!
   }
 
-  memoizedKeysFromOptions (name, options) {
+  generatedFunctionsKeysFromOptions (name, options) {
     const key = JSON.stringify(options);
     return `${name}::${key}`;
   }
 
-  memoizedFunction (key, options, generator) {
-    const memoizedKey = this.memoizedKeysFromOptions(key, options);
-    let fn = this.memoized[memoizedKey];
+  cacheGeneratorFunction (key, options, generator) {
+    const generatedFunctionsKey = this.generatedFunctionsKeysFromOptions(key, options);
+    let fn = this.generatedFunctions[generatedFunctionsKey];
     if (!fn) {
       fn = generator();
-      this.memoized[memoizedKey] = fn;
+      this.generatedFunctions[generatedFunctionsKey] = fn;
     }
     return fn;
   }
 
   indexAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('index', options, () => {
+    return this.cacheGeneratorFunction('index', options, () => {
       return (dataManager) => {
         return indexAction(dataManager, options);
       };
@@ -46,7 +49,7 @@ class RestActionsGeneratorGenerator {
 
   showAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('show', options, () => {
+    return this.cacheGeneratorFunction('show', options, () => {
       return (dataManager) => {
         return showAction(dataManager, options);
       };
@@ -55,55 +58,55 @@ class RestActionsGeneratorGenerator {
 
   createAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('create', options, () => {
-      return (dataManager) => {
+    return this.cacheGeneratorFunction('create', options, () => {
+      return memoizeAction((dataManager) => {
         return createAction(dataManager, options);
-      };
+      });
     });
   }
 
   deleteAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('delete', options, () => {
-      return (dataManager) => {
+    return this.cacheGeneratorFunction('delete', options, () => {
+      return memoizeAction((dataManager) => {
         return deleteAction(dataManager, options);
-      };
+      });
     });
   }
 
   updateAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('update', options, () => {
-      return (dataManager) => {
+    return this.cacheGeneratorFunction('update', options, () => {
+      return memoizeAction((dataManager) => {
         return updateAction(dataManager, options);
-      };
+      });
     });
   }
 
   invalidateShowAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('invalidateShow', options, () => {
-      return (dataManager) => {
+    return this.cacheGeneratorFunction('invalidateShow', options, () => {
+      return memoizeAction((dataManager) => {
         return invalidateShowAction(dataManager, options);
-      };
+      });
     });
   }
 
   invalidateIndexAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('invalidateIndex', options, () => {
-      return (dataManager) => {
+    return this.cacheGeneratorFunction('invalidateIndex', options, () => {
+      return memoizeAction((dataManager) => {
         return invalidateIndexAction(dataManager, options);
-      };
+      });
     });
   }
 
   invalidateAllAction (o) {
     const options = this.mergeOptions(o);
-    return this.memoizedFunction('invalidateAll', options, () => {
-      return (dataManager) => {
+    return this.cacheGeneratorFunction('invalidateAll', options, () => {
+      return memoizeAction((dataManager) => {
         return invalidateAllAction(dataManager, options);
-      };
+      });
     });
   }
 

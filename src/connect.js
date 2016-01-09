@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { shallowCompareProps } from './helpers/';
 
 export default function connect (WrappedComponent) {
   class ConnectedComponent extends React.Component {
@@ -11,9 +12,8 @@ export default function connect (WrappedComponent) {
     }
 
     componentDidMount () {
-      this.subscriber = this.onProviderDispatch.bind(this);
+      this.subscriber = ::this.onProviderDispatch;
       this.context.dataManager.subscribe(this.subscriber);
-      this.setupData();
     }
 
     componentWillReceiveProps (nextProps) {
@@ -30,15 +30,14 @@ export default function connect (WrappedComponent) {
 
     onProviderDispatch () {
       if (this.subscriber && !this.isUpdating) {
-        this.setupData();
+        this.setupData(this.props);
       }
     }
 
     setupData (nextProps) {
       this.updateDataRequirements(nextProps);
       const newState = Object.assign({}, this.getConnectedData());
-      // todo replace with a shallow comparison
-      if (!_.isEqual(newState, this.state)) {
+      if (!this.state || !shallowCompareProps(newState, this.state)) {
         if (!this.state) {
           this.state = newState;
         } else {
@@ -58,12 +57,11 @@ export default function connect (WrappedComponent) {
       return newState;
     }
 
-
     getConnectedActions (nextProps) {
       const connectedActions = WrappedComponent.connectedActions;
       if (connectedActions) {
         if (typeof connectedActions === 'function') {
-          return connectedActions.call(undefined, Object.assign({}, this.props, nextProps || {}));
+          return connectedActions.call(undefined, Object.assign({}, nextProps || {}));
         } else {
           return connectedActions;
         }
@@ -79,9 +77,7 @@ export default function connect (WrappedComponent) {
       const newMapping = this.getConnectedActions(nextProps);
       if (!_.isEqual(this.connectedActions, newMapping)) {
         this.connectedActions = newMapping;
-        return true;
       }
-      return false;
     }
   }
   ConnectedComponent.displayName = `connect(${WrappedComponent.displayName || WrappedComponent.name})`;
