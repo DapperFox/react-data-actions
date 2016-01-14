@@ -1,6 +1,6 @@
 {
   "name": "react-data-actions",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "React data action generators for RESTful and stateful actions.",
   "main": "lib/index.js",
   "scripts": {
