@@ -15,7 +15,7 @@ export default function headersFromResponse (response) {
       }
     }
   } else if (response.headers.map) {
-    for (let i in response.headers.map) {
+    for (const i in response.headers.map) {
       if (response.headers.map.hasOwnProperty(i)) {
         const value = response.headers.map[i];
         if (value.length > 1) {
