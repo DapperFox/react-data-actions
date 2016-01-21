@@ -35,7 +35,10 @@ function performRequest (data, dataManager, options) {
     })).then((response) => {
       try {
         if (response.ok) {
-          const modelData = response.json();
+          let modelData;
+          if (response.bodyUsed) {
+            modelData = response.json();
+          }
           processAddition(modelData || data, dataManager, options);
           resolve(response, modelData);
         } else {

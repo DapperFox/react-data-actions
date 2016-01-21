@@ -58,7 +58,10 @@ function performRequest (id, modelData, options, dataManager) {
     })).then((response) => {
       try {
         if (response.ok) {
-          const newModelData = response.json();
+          let newModelData;
+          if (response.bodyUsed) {
+            newModelData = response.json();
+          }
           if (options.waitFor) {
             processUpdate(id, newModelData || modelData, options, dataManager);
           }
