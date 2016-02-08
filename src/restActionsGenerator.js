@@ -3,12 +3,14 @@ import {
   indexAction,
   showAction,
   deleteAction,
+  patchAction,
   updateAction,
   createAction,
   invalidateAllAction,
   invalidateIndexAction,
   invalidateShowAction,
 } from './actions/';
+
 import {
   memoizeAction,
 } from './helpers/';
@@ -70,6 +72,15 @@ class RestActionsGeneratorGenerator {
     return this.cacheGeneratorFunction('delete', options, () => {
       return memoizeAction((dataManager) => {
         return deleteAction(dataManager, options);
+      });
+    });
+  }
+
+  patchAction (o) {
+    const options = this.mergeOptions(o);
+    return this.cacheGeneratorFunction('patch', options, () => {
+      return memoizeAction((dataManager) => {
+        return patchAction(dataManager, options);
       });
     });
   }
