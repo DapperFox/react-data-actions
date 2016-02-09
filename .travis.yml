@@ -4,6 +4,8 @@ node_js:
   - "4.1"
 before_install:
   - sudo rm -rf /usr/local/phantomjs
+  - npm set progress=false
+  - npm install
 cache:
   directories:
   - node_modules
