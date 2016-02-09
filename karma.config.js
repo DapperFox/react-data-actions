@@ -13,7 +13,7 @@ module.exports = function (config) {
     ],
     plugins: [
       'karma-mocha',
-      'karma-phantomjs-launcher',
+      'karma-phantomjs2-launcher',
       'karma-sourcemap-loader',
       'karma-webpack',
     ],
@@ -29,7 +29,7 @@ module.exports = function (config) {
     autoWatch: true,
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['PhantomJS2'],
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false,
     // Concurrency level

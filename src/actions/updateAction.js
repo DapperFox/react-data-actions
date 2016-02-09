@@ -1,4 +1,5 @@
 import 'whatwg-fetch';
+import 'babel-polyfill';
 import _ from 'lodash';
 import { getFetchConfiguration } from '../configureFetch';
 import {
