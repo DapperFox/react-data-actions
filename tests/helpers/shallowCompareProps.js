@@ -37,7 +37,7 @@ describe('shallowCompareProps', function () {
     }, {
       a: 'hello',
       b: x,
-    })).toEqual(false);
+    })).toEqual(true);
   });
   it('should return false when value is missing from first', function () {
     const x = {};
