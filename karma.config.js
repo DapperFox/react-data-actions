@@ -16,11 +16,15 @@ module.exports = function (config) {
       'karma-phantomjs2-launcher',
       'karma-sourcemap-loader',
       'karma-webpack',
+      'karma-coverage',
     ],
     preprocessors: {
       'karma.webpack.config.js': ['webpack', 'sourcemap'], // preprocess with webpack and our sourcemap loader
     },
-    reporters: ['progress'],
+    coverageReporter: {
+      type: 'text',
+    },
+    reporters: ['progress', 'coverage'],
     port: 9876,
     colors: true,
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
@@ -43,6 +47,13 @@ module.exports = function (config) {
             loader: 'babel-loader',
             test: /\.js$/,
             exclude: /node_modules/,
+          },
+        ],
+        postLoaders: [
+          {
+            loader: 'istanbul-instrumenter',
+            include: path.resolve('src/'),
+            test: /\.js$/,
           },
         ],
       },
