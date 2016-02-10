@@ -19,6 +19,16 @@ describe('updateAction', function () {
           },
         },
       },
+      byWhere: {
+        '{}': {
+          data: [{
+            id: 1,
+            hi: 1,
+            guid: 'guid-1',
+            something: 'before',
+          }],
+        },
+      },
     }, '/model');
   });
 
@@ -56,7 +66,7 @@ describe('updateAction', function () {
     expect(fetchMock.called('/model/1')).toEqual(false);
   });
 
-  it('should update immediately model/1 when performRequest is false', function () {
+  it('should update immediately model/1 byId when performRequest is false', function () {
     const action = updateAction(this.dataManager, {
       path: '/model',
       performRequest: false,
@@ -64,6 +74,17 @@ describe('updateAction', function () {
 
     action({ id: 1, hi: 2 });
     expect(this.dataManager.getStateForKey('/model').byId[1].data.hi).toEqual(2);
+  });
+
+  it('should update immediately model/1 in byWhere when performRequest is false', function () {
+    const action = updateAction(this.dataManager, {
+      path: '/model',
+      performRequest: false,
+    });
+
+    action({ id: 1, hi: 2 });
+    const state = this.dataManager.getStateForKey('/model').byWhere['{}'];
+    expect(state.data[0].hi).toEqual(2);
   });
 
   it('should update model/1 when performRequest is true, ignoring results, when waitFor is false', function () {
@@ -139,6 +160,19 @@ describe('updateAction', function () {
     return action({ name: 'hi' }).then((model) => {
       expect(model.name).toEqual('hi');
       expect(model.post).toEqual(2);
+    });
+  });
+
+  it('action promise should go to catch on 400', function (done) {
+    fetchMock.mock('/model', 'PUT', 400);
+    const action = updateAction(this.dataManager, {
+      path: '/model',
+      performRequest: true,
+      waitFor: true,
+    });
+
+    return action({ name: 'hi' }).catch(() => {
+      done();
     });
   });
 });
