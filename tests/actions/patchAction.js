@@ -112,4 +112,32 @@ describe('patchAction', function () {
       expect(this.dataManager.getStateForKey('/model').byId[1].data.hi).toEqual(2);
     });
   });
+
+  it('action promise should resolve with newest copy of model', function () {
+    fetchMock.mock('/model/1', 'PATCH', { id: 1, name: 'hi', post: 2 });
+    const action = patchAction(this.dataManager, {
+      path: '/model',
+      performRequest: true,
+      waitFor: true,
+    });
+
+    return action({ id: '1', name: 'hi' }).then((model) => {
+      expect(model.name).toEqual('hi');
+      expect(model.post).toEqual(2);
+    });
+  });
+
+  it('action promise should resolve with latest copy on 204', function () {
+    fetchMock.mock('/model/1', 'PATCH', 204);
+    const action = patchAction(this.dataManager, {
+      path: '/model',
+      performRequest: true,
+      waitFor: true,
+    });
+
+    return action({ id: '1', name: 'hi' }).then((model) => {
+      expect(model.name).toEqual('hi');
+      expect(model.something).toEqual('before');
+    });
+  });
 });

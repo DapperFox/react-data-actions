@@ -43,26 +43,28 @@ function processDeletion (id, options, dataManager) {
 }
 
 function performRequest (id, options, dataManager) {
-  return new Promise((resolve, reject) => {
-    const fetchURL = buildRequestPath(options, id);
-    return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
-      method: 'DELETE',
-    })).then((response) => {
-      try {
-        if (response.ok) {
-          if (options.waitFor) {
-            processDeletion(id, options, dataManager);
-          }
-          resolve(response, id);
-        } else {
-          reject(response);
-        }
-      } catch (e) {
-        reject(response);
-      }
-    }).catch((response) => {
-      reject(response);
-    });
+  const fetchURL = buildRequestPath(options, id);
+  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+    method: 'DELETE',
+  })).then((response) => {
+    if (response.ok) {
+      return response;
+    } else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  }).then((response) => {
+    if (response.status !== 204) {
+      return response.json();
+    } else {
+      return {};
+    }
+  }).then((body) => {
+    if (options.waitFor) {
+      processDeletion(id, options, dataManager);
+    }
+    return body;
   });
 }
 

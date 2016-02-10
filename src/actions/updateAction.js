@@ -51,35 +51,29 @@ function processUpdate (id, modelData, options, dataManager) {
 }
 
 function performRequest (id, modelData, options, dataManager) {
-  return new Promise((resolve, reject) => {
-    let requestResponse;
-    const fetchURL = buildRequestPath(options, id);
-    return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
-      method: 'PUT',
-      body: JSON.stringify(modelData),
-    })).then((response) => {
-      requestResponse = response;
-      if (response.ok) {
-        return response;
-      } else {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    }).then((response) => {
-      if (response.status !== 204) {
-        return response.json();
-      } else {
-        return modelData;
-      }
-    }).then((newModelData) => {
-      if (options.waitFor) {
-        processUpdate(id, newModelData, options, dataManager);
-      }
-      resolve(requestResponse, newModelData);
-    }).catch((response) => {
-      reject(response);
-    });
+  const fetchURL = buildRequestPath(options, id);
+  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+    method: 'PUT',
+    body: JSON.stringify(modelData),
+  })).then((response) => {
+    if (response.ok) {
+      return response;
+    } else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  }).then((response) => {
+    if (response.status !== 204) {
+      return response.json();
+    } else {
+      return modelData;
+    }
+  }).then((newModelData) => {
+    if (options.waitFor) {
+      processUpdate(id, newModelData, options, dataManager);
+    }
+    return newModelData;
   });
 }
 

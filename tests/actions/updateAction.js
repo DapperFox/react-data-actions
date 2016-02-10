@@ -127,4 +127,18 @@ describe('updateAction', function () {
       expect(this.dataManager.getStateForKey('/model').byId[1].data.hi).toEqual(2);
     });
   });
+
+  it('action promise should resolve with newest copy of model', function () {
+    fetchMock.mock('/model', 'PUT', { id: 1, name: 'hi', post: 2 });
+    const action = updateAction(this.dataManager, {
+      path: '/model',
+      performRequest: true,
+      waitFor: true,
+    });
+
+    return action({ name: 'hi' }).then((model) => {
+      expect(model.name).toEqual('hi');
+      expect(model.post).toEqual(2);
+    });
+  });
 });

@@ -27,33 +27,27 @@ function processAddition (modelData, dataManager, options) {
 }
 
 function performRequest (data, dataManager, options) {
-  return new Promise((resolve, reject) => {
-    let requestResponse;
-    const fetchURL = buildRequestPath(options);
-    return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })).then((response) => {
-      requestResponse = response;
-      if (response.ok) {
-        return response;
-      } else {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    }).then((response) => {
-      if (response.status !== 204) {
-        return response.json();
-      } else {
-        return data;
-      }
-    }).then((modelData) => {
-      processAddition(modelData, dataManager, options);
-      resolve(requestResponse, modelData);
-    }).catch((response) => {
-      reject(response);
-    });
+  const fetchURL = buildRequestPath(options);
+  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })).then((response) => {
+    if (response.ok) {
+      return response;
+    } else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  }).then((response) => {
+    if (response.status !== 204) {
+      return response.json();
+    } else {
+      return data;
+    }
+  }).then((modelData) => {
+    processAddition(modelData, dataManager, options);
+    return modelData;
   });
 }
 
