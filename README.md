@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/nuvi/react-data-actions.svg)](https://travis-ci.org/nuvi/react-data-actions)
+[![Build Status](https://travis-ci.org/inlineblock/react-data-actions.svg)](https://travis-ci.org/inlineblock/react-data-actions)
 # React Data Actions
 
 ## What
