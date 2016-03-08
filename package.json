@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nuvi/react-data-actions.git"
+    "url": "git+https://github.com/inlineblock/react-data-actions.git"
   },
   "keywords": [
     "react",
@@ -27,9 +27,9 @@
   "author": "support@inlineblock.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nuvi/react-data-actions/issues"
+    "url": "https://github.com/inlineblock/react-data-actions/issues"
   },
-  "homepage": "https://github.com/nuvi/react-data-actions#readme",
+  "homepage": "https://github.com/inlineblock/react-data-actions#readme",
   "peerDependencies": {
     "react": "^0.14.3",
     "whatwg-fetch": "^0.10.1"
