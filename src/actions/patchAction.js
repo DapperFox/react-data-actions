@@ -100,5 +100,6 @@ export default function patchAction (dataManager, options) {
     if (options.performRequest) {
       return performRequest(id, patchData, options, dataManager);
     }
+    return undefined;
   };
 }

@@ -78,5 +78,6 @@ export default function deleteAction (dataManager, options) {
     if (options.performRequest) {
       return performRequest(id, options, dataManager);
     }
+    return undefined;
   };
 }

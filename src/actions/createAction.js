@@ -57,6 +57,7 @@ export default function createAction (dataManager, options) {
       return performRequest(data, dataManager, options);
     } else {
       processAddition(data, dataManager, options);
+      return undefined;
     }
   };
 }

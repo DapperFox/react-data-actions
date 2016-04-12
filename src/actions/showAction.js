@@ -20,7 +20,7 @@ function processResponseFailure (response, dataManager, options, id) {
     isFetching: false,
     status: response.status,
     statusText: response.statusText,
-    headers: headers,
+    headers,
   }, options, id);
 }
 
@@ -35,7 +35,7 @@ async function processResponse (response, dataManager, options, id) {
         hasError: false,
         isFetching: false,
         status: response.status,
-        headers: headers,
+        headers,
       }, options, id);
     } else {
       processResponseFailure(response, dataManager, options, id);

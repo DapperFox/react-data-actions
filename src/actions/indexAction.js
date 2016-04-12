@@ -24,7 +24,7 @@ function processResponseFailure (response, dataManager, options) {
     fetchDate: new Date(),
     status: response.status,
     statusText: response.statusText,
-    headers: headers,
+    headers,
   }, options);
 }
 
@@ -43,7 +43,7 @@ async function processResponse (response, dataManager, options) {
               hasError: false,
               fetchDate: new Date(),
               status: response.status,
-              headers: headers,
+              headers,
             }, options, id, true);
           }
         });
@@ -54,7 +54,7 @@ async function processResponse (response, dataManager, options) {
         hasError: false,
         fetchDate: new Date(),
         status: response.status,
-        headers: headers,
+        headers,
       }, options);
     } else {
       processResponseFailure(response, dataManager, options);

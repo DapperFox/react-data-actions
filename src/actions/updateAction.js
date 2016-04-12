@@ -86,5 +86,6 @@ export default function updateAction (dataManager, options) {
     if (options.performRequest) {
       return performRequest(id, modelData, options, dataManager);
     }
+    return undefined;
   };
 }
