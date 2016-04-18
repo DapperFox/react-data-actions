@@ -9,6 +9,8 @@ import {
   invalidateAllAction,
   invalidateIndexAction,
   invalidateShowAction,
+  updateIndexAction,
+  appendIndexAction,
 } from './actions/';
 
 import {
@@ -90,6 +92,24 @@ class RestActionsGeneratorGenerator {
     return this.cacheGeneratorFunction('update', options, () => {
       return memoizeAction((dataManager) => {
         return updateAction(dataManager, options);
+      });
+    });
+  }
+
+  updateIndexAction (o) {
+    const options = this.mergeOptions(o);
+    return this.cacheGeneratorFunction('update', options, () => {
+      return memoizeAction((dataManager) => {
+        return updateIndexAction(dataManager, options);
+      });
+    });
+  }
+
+  appendIndexAction (o) {
+    const options = this.mergeOptions(o);
+    return this.cacheGeneratorFunction('update', options, () => {
+      return memoizeAction((dataManager) => {
+        return appendIndexAction(dataManager, options);
       });
     });
   }

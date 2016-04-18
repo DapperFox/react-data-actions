@@ -78,7 +78,7 @@ async function processRequestForData (dataManager, options) {
 export default function indexAction (dataManager, options) {
   const stateKey = stateKeyFromOptions(options);
   const state = existingStateForKey(dataManager, stateKey);
-  const whereKey = buildCacheKeyFromOptions(options);
+  const whereKey = buildCacheKeyFromOptions(options.where);
   let currentState = state.byWhere[whereKey];
   if (isStateStale(currentState, options) && !isStateFetching(state)) {
     // so its stale or not there, fetch it.
