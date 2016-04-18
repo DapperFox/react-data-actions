@@ -40,7 +40,7 @@ describe('appendIndexAction', function () {
     expect(state.byWhere[whereKey].data[0].id).toEqual(10);
   });
 
-  it('should add replace existing model set dataManager to byWhere', function () {
+  it('should replace existing model set dataManager to byWhere using id', function () {
     const whereKey = buildCacheKeyFromOptions(this.options.where);
     this.dataManager.setStateForKey({
       byId: {
@@ -74,6 +74,37 @@ describe('appendIndexAction', function () {
     expect(nextState.byWhere[whereKey].data[0].hi).toEqual('second');
     expect(nextState.byId['10'].data.hi).toEqual('second');
   });
+
+  it('should append new model set dataManager to byWhere in order', function () {
+    const whereKey = buildCacheKeyFromOptions(this.options.where);
+    this.dataManager.setStateForKey({
+      byId: {
+      },
+      byWhere: {
+        [whereKey]: {
+          data: [{
+            id: 10,
+            hi: 'ten',
+          }],
+        },
+      },
+    }, '/model');
+    const state = this.dataManager.getStateForKey('/model');
+    expect(state.byWhere[whereKey].data[0].hi).toEqual('ten');
+    this.action({
+      id: 11,
+      hi: 'eleven',
+    });
+    this.action({
+      id: 12,
+      hi: 'twelve',
+    });
+    const nextState = this.dataManager.getStateForKey('/model');
+    expect(nextState.byWhere[whereKey].data[0].hi).toEqual('ten');
+    expect(nextState.byWhere[whereKey].data[1].hi).toEqual('eleven');
+    expect(nextState.byWhere[whereKey].data[2].hi).toEqual('twelve');
+  });
+
 
   it('should allow modification of meta data liek fetchDate', function () {
     const whereKey = buildCacheKeyFromOptions(this.options.where);

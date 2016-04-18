@@ -14,7 +14,7 @@ export default function appendIndexAction (dataManager, options) {
     const idAttribute = options.idAttribute || 'id';
     const id = model[idAttribute];
     const state = existingStateForKey(dataManager, stateKey);
-    const whereKey = buildCacheKeyFromOptions(options);
+    const whereKey = buildCacheKeyFromOptions(options.where);
     let currentState = state.byWhere[whereKey];
     if (!currentState) {
       currentState = createInitialFetchState();
