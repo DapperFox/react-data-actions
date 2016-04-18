@@ -152,4 +152,4 @@ export default function restActionsGenerator (config) {
 }
 export {
   RestActionsGeneratorGenerator,
-}
+};
