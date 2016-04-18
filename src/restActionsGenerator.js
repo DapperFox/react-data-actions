@@ -150,3 +150,6 @@ class RestActionsGeneratorGenerator {
 export default function restActionsGenerator (config) {
   return new RestActionsGeneratorGenerator(config); // i can use new if i want to.
 }
+export {
+  RestActionsGeneratorGenerator,
+}
