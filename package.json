@@ -31,8 +31,8 @@
   },
   "homepage": "https://github.com/inlineblock/react-data-actions#readme",
   "peerDependencies": {
-    "react": "~15.0.1",
-    "whatwg-fetch": "~0.11.0"
+    "react": "^15.1.0",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "~6.7.5",
@@ -64,12 +64,12 @@
     "karma-sourcemap-loader": "~0.3.7",
     "karma-webpack": "~1.7.0",
     "mocha": "^2.4.5",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
     "rimraf": "^2.5.2",
     "url-loader": "~0.5.7",
     "webpack": "^1.12.15",
-    "whatwg-fetch": "~0.11.0"
+    "whatwg-fetch": "^1.0.0"
   },
   "dependencies": {
     "lodash": "~4.10.0"
