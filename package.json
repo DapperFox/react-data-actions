@@ -7,6 +7,7 @@
     "test": "npm run lint && npm run karma",
     "lint": "eslint src",
     "karma": "karma start karma.config.js --browsers Firefox --single-run",
+    "karma-watch": "karma start karma.config.js --browsers Firefox",
     "prepublish": "npm run clean && npm run build",
     "clean": "rimraf lib",
     "build": "npm run build:lib",
