@@ -69,7 +69,7 @@ async function processRequestForData (dataManager, options) {
   if (options.where) {
     fetchURL = `${fetchURL}?${toQueryString(options.where)}`;
   }
-  const response = await fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+  const response = await window.fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
     method: 'GET',
   }));
   processResponse(response, dataManager, options);

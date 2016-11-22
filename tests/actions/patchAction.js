@@ -1,8 +1,8 @@
 import patchAction from '../../src/actions/patchAction';
-import DataManager from '../../src/DataManager';
-import 'whatwg-fetch';
 import fetchMock from 'fetch-mock';
 import expect from 'expect';
+import DataManager from '../../src/DataManager';
+import 'whatwg-fetch';
 
 describe('patchAction', function () {
   beforeEach(function () {
@@ -23,7 +23,7 @@ describe('patchAction', function () {
   });
 
   it('should performRequest PATCH to /models/1 when id is 1', function () {
-    fetchMock.mock('/model/1', 'PATCH', {});
+    fetchMock.patch('/model/1', {});
     const action = patchAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -34,7 +34,7 @@ describe('patchAction', function () {
   });
 
   it('should performRequest PATCH to /models/guid-1 when idAttribute is guid', function () {
-    fetchMock.mock('/model/guid-1', 'PATCH', {});
+    fetchMock.patch('/model/guid-1', {});
     const action = patchAction(this.dataManager, {
       idAttribute: 'guid',
       path: '/model',
@@ -46,7 +46,7 @@ describe('patchAction', function () {
   });
 
   it('should NOT performRequest PATCH to /models/guid-1 when idAttribute is guid', function () {
-    fetchMock.mock('/model/1', 'PATCH', {});
+    fetchMock.patch('/model/1', {});
     const action = patchAction(this.dataManager, {
       path: '/model',
       performRequest: false,
@@ -67,7 +67,7 @@ describe('patchAction', function () {
   });
 
   it('should patch model/1 when performRequest is true, ignoring results, when waitFor is false', function () {
-    fetchMock.mock('/model/1', 'PATCH', JSON.stringify({
+    fetchMock.patch('/model/1', JSON.stringify({
       id: 1,
       hi: 3,
       blah: 'test',
@@ -84,7 +84,7 @@ describe('patchAction', function () {
   });
 
   it('should patch model/1 when performRequest is true, merging results with old model, when waitFor is true', function () {
-    fetchMock.mock('/model/1', 'PATCH', JSON.stringify({
+    fetchMock.patch('/model/1', JSON.stringify({
       id: 1,
       hi: 3,
       blah: 'test',
@@ -102,7 +102,7 @@ describe('patchAction', function () {
   });
 
   it('should patch model/1 with action data, even if waitFor is true on a 204', function () {
-    fetchMock.mock('/model/1', 'PATCH', 204);
+    fetchMock.patch('/model/1', 204);
     const action = patchAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -114,7 +114,7 @@ describe('patchAction', function () {
   });
 
   it('action promise should resolve with newest copy of model', function () {
-    fetchMock.mock('/model/1', 'PATCH', { id: 1, name: 'hi', post: 2 });
+    fetchMock.patch('/model/1', { id: 1, name: 'hi', post: 2 });
     const action = patchAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -128,7 +128,7 @@ describe('patchAction', function () {
   });
 
   it('action promise should resolve with latest copy on 204', function () {
-    fetchMock.mock('/model/1', 'PATCH', 204);
+    fetchMock.patch('/model/1', 204);
     const action = patchAction(this.dataManager, {
       path: '/model',
       performRequest: true,

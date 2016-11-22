@@ -48,7 +48,7 @@ async function processResponse (response, dataManager, options, id) {
 async function processRequestForData (dataManager, options) {
   const id = options[options.idAttribute] || options.id;
   const fetchURL = buildRequestPath(options, id);
-  const response = await fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+  const response = await window.fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
     method: 'GET',
   }));
 

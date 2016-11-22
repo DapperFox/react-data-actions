@@ -1,14 +1,15 @@
 export default function shallowCompareProps (props = {}, otherProps = {}) {
-  let n;
-  for (n in props) {
-    if (!otherProps.hasOwnProperty(n) || otherProps[n] !== props[n]) {
-      return false;
-    }
+  const propsKeys = Object.keys(props);
+  if (propsKeys.find((key) => {
+    return otherProps[key] !== props[key];
+  }) !== undefined) {
+    return false;
   }
-  for (n in otherProps) {
-    if (!props.hasOwnProperty(n) || otherProps[n] !== props[n]) {
-      return false;
-    }
+  const otherPropsKeys = Object.keys(otherProps);
+  if (otherPropsKeys.find((key) => {
+    return otherProps[key] !== props[key];
+  }) !== undefined) {
+    return false;
   }
   return true;
 }

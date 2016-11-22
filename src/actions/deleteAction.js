@@ -9,7 +9,7 @@ import {
 
 
 function deleteFromWhereCollection (id, idAttribute, collection) {
-  return _.reject(collection, (modelData) => {// this breaks refs too :)
+  return _.reject(collection, (modelData) => { // this breaks refs too :)
     return modelData && modelData[idAttribute] === id;
   });
 }
@@ -21,15 +21,14 @@ function cascadeDeletion (id, options, dataManager) {
   if (states.byId[id]) {
     delete states.byId[id];
   }
-  for (const i in states.byWhere) {
-    if (states.byWhere.hasOwnProperty(i)) {
-      states.byWhere[i] = Object.assign({}, states.byWhere[i]); // gotta clone this guy, break dat reference.
-      const whereCollection = states.byWhere[i].data;
-      if (whereCollection && _.isArray(whereCollection)) {
-        states.byWhere[i].data = deleteFromWhereCollection(id, idAttribute, whereCollection);
-      }
+  const keys = Object.keys(states.byWhere);
+  keys.forEach((i) => {
+    states.byWhere[i] = Object.assign({}, states.byWhere[i]); // gotta clone this guy, break dat reference.
+    const whereCollection = states.byWhere[i].data;
+    if (whereCollection && _.isArray(whereCollection)) {
+      states.byWhere[i].data = deleteFromWhereCollection(id, idAttribute, whereCollection);
     }
-  }
+  });
   dataManager.setStateForKey(Object.assign({}, states), stateKey);
 }
 
@@ -44,7 +43,7 @@ function processDeletion (id, options, dataManager) {
 
 function performRequest (id, options, dataManager) {
   const fetchURL = buildRequestPath(options, id);
-  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+  return window.fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
     method: 'DELETE',
   })).then((response) => {
     if (response.ok) {

@@ -48,12 +48,11 @@ export default function connect (WrappedComponent) {
 
     getConnectedData () {
       const newState = {};
-      for (const i in this.connectedActions) {
-        if (this.connectedActions.hasOwnProperty(i)) {
-          const connectedAction = this.connectedActions[i];
-          newState[i] = connectedAction(this.context.dataManager);
-        }
-      }
+      const keys = Object.keys(this.connectedActions);
+      keys.forEach((key) => {
+        const connectedAction = this.connectedActions[key];
+        newState[key] = connectedAction(this.context.dataManager);
+      });
       return newState;
     }
 
@@ -70,7 +69,8 @@ export default function connect (WrappedComponent) {
     }
 
     render () {
-      return <WrappedComponent ref="connectedComponent" { ...this.props } { ...this.state } />;
+      /* eslint-disable react/jsx-filename-extension */
+      return <WrappedComponent ref={(n) => { this.connectedComponent = n; }} {...this.props} {...this.state} />;
     }
 
     updateDataRequirements (nextProps) {

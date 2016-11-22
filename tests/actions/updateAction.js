@@ -33,7 +33,7 @@ describe('updateAction', function () {
   });
 
   it('should performRequest PUT to /models/1 when id is 1', function () {
-    fetchMock.mock('/model/1', 'PUT', {});
+    fetchMock.put('/model/1', {});
     const action = updateAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -44,7 +44,7 @@ describe('updateAction', function () {
   });
 
   it('should performRequest PUT to /models/guid-1 when idAttribute is guid', function () {
-    fetchMock.mock('/model/guid-1', 'PUT', {});
+    fetchMock.put('/model/guid-1', {});
     const action = updateAction(this.dataManager, {
       idAttribute: 'guid',
       path: '/model',
@@ -56,7 +56,7 @@ describe('updateAction', function () {
   });
 
   it('should NOT performRequest PUT to /models/guid-1 when idAttribute is guid', function () {
-    fetchMock.mock('/model/1', 'PUT', {});
+    fetchMock.put('/model/1', {});
     const action = updateAction(this.dataManager, {
       path: '/model',
       performRequest: false,
@@ -88,7 +88,7 @@ describe('updateAction', function () {
   });
 
   it('should update model/1 when performRequest is true, ignoring results, when waitFor is false', function () {
-    fetchMock.mock('/model/1', 'PUT', JSON.stringify({
+    fetchMock.put('/model/1', JSON.stringify({
       id: 1,
       hi: 3,
       blah: 'test',
@@ -105,7 +105,7 @@ describe('updateAction', function () {
   });
 
   it('should update model/1 when performRequest is true, using results, when waitFor is true', function () {
-    fetchMock.mock('/model/1', 'PUT', JSON.stringify({
+    fetchMock.put('/model/1', JSON.stringify({
       id: 1,
       hi: 3,
       blah: 'test',
@@ -122,7 +122,7 @@ describe('updateAction', function () {
   });
 
   it('should update model/1 when performRequest is true, REPLACING old model completely with results, when waitFor is true', function () {
-    fetchMock.mock('/model/1', 'PUT', JSON.stringify({
+    fetchMock.put('/model/1', JSON.stringify({
       id: 1,
       hi: 2,
     }));
@@ -138,7 +138,7 @@ describe('updateAction', function () {
   });
 
   it('should update model/1 with action data, even if waitFor is true on a 204', function () {
-    fetchMock.mock('/model/1', 'PUT', 204);
+    fetchMock.put('/model/1', 204);
     const action = updateAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -150,7 +150,7 @@ describe('updateAction', function () {
   });
 
   it('action promise should resolve with newest copy of model', function () {
-    fetchMock.mock('/model', 'PUT', { id: 1, name: 'hi', post: 2 });
+    fetchMock.put('/model', { id: 1, name: 'hi', post: 2 });
     const action = updateAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -164,14 +164,14 @@ describe('updateAction', function () {
   });
 
   it('action promise should go to catch on 400', function (done) {
-    fetchMock.mock('/model', 'PUT', 400);
+    fetchMock.put('/model', 400);
     const action = updateAction(this.dataManager, {
       path: '/model',
       performRequest: true,
       waitFor: true,
     });
 
-    return action({ name: 'hi' }).catch(() => {
+    action({ name: 'hi' }).catch(() => {
       done();
     });
   });

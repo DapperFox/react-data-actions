@@ -5,7 +5,7 @@ import connect from '../src/connect';
 import React from 'react';
 import DataManager from '../src/DataManager';
 import DataProvider from '../src/DataProvider';
-import ReactTestUtils from 'react/lib/ReactTestUtils';
+import ReactTestUtils from 'react-addons-test-utils';
 import ReactDOMServer from 'react-dom/server';
 import ReactDOM from 'react-dom';
 

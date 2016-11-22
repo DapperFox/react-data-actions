@@ -39,14 +39,13 @@ function cascadePatch (id, patchedData, options, dataManager) {
       response: 200,
     });
   }
-  for (const i in states.byWhere) {
-    if (states.byWhere.hasOwnProperty(i)) {
-      states.byWhere[i] = Object.assign({}, states.byWhere[i]);// gotta clone this guy, break dat reference.
-      if (states.byWhere[i].data && _.isArray(states.byWhere[i].data)) {
-        states.byWhere[i].data = patchFromWhereCollection(id, idAttribute, patchedData, states.byWhere[i].data);
-      }
+  const keys = Object.keys(states.byWhere || {});
+  keys.forEach((i) => {
+    states.byWhere[i] = Object.assign({}, states.byWhere[i]);// gotta clone this guy, break dat reference.
+    if (states.byWhere[i].data && _.isArray(states.byWhere[i].data)) {
+      states.byWhere[i].data = patchFromWhereCollection(id, idAttribute, patchedData, states.byWhere[i].data);
     }
-  }
+  });
   dataManager.setStateForKey(Object.assign({}, states), stateKey);
 }
 
@@ -61,7 +60,7 @@ function processPatch (id, patchData, options, dataManager) {
 
 function performRequest (id, patchData, options, dataManager) {
   const fetchURL = buildRequestPath(options, id);
-  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+  return window.fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
     method: 'PATCH',
     body: JSON.stringify(patchData),
   })).then((response) => {

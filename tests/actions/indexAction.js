@@ -1,8 +1,8 @@
-import indexAction from '../../src/actions/indexAction';
-import DataManager from '../../src/DataManager';
 import 'whatwg-fetch';
 import fetchMock from 'fetch-mock';
 import expect from 'expect';
+import indexAction from '../../src/actions/indexAction';
+import DataManager from '../../src/DataManager';
 
 describe('indexAction', function () {
   beforeEach(function () {
@@ -11,7 +11,7 @@ describe('indexAction', function () {
   });
 
   it('should do GET request to /models for index', function () {
-    fetchMock.mock('/model', 'GET', [{ id: 1, name: 'hi' }]);
+    fetchMock.get('/model', [{ id: 1, name: 'hi' }]);
     const state = indexAction(this.dataManager, {
       path: '/model',
     });
@@ -20,7 +20,7 @@ describe('indexAction', function () {
   });
 
   it('should do set .data for state', function (done) {
-    fetchMock.mock('/model', 'GET', [{ id: 1, name: 'hi' }]);
+    fetchMock.get('/model', [{ id: 1, name: 'hi' }]);
     indexAction(this.dataManager, {
       path: '/model',
     });
@@ -36,7 +36,7 @@ describe('indexAction', function () {
   });
 
   it('should do set byId equiv for state in dataManager', function (done) {
-    fetchMock.mock('/model', 'GET', [{ id: 'guid-1', name: 'hi' }]);
+    fetchMock.get('/model', [{ id: 'guid-1', name: 'hi' }]);
     indexAction(this.dataManager, {
       path: '/model',
     });

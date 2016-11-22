@@ -33,7 +33,7 @@ describe('deleteAction', function () {
   });
 
   it('should performRequest DELETE to /models/1 when id is 1', function () {
-    fetchMock.mock('/model/1', 'DELETE', {});
+    fetchMock.delete('/model/1', {});
     const action = deleteAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -44,7 +44,7 @@ describe('deleteAction', function () {
   });
 
   it('should remove from dataManager byId', function () {
-    fetchMock.mock('/model/1', 'DELETE', {});
+    fetchMock.delete('/model/1', {});
     const action = deleteAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -58,7 +58,7 @@ describe('deleteAction', function () {
   });
 
   it('should remove from dataManager byWhere', function () {
-    fetchMock.mock('/model/1', 'DELETE', {});
+    fetchMock.delete('/model/1', {});
     const action = deleteAction(this.dataManager, {
       path: '/model',
       performRequest: true,

@@ -1,30 +1,25 @@
-import _ from 'lodash';
 export default function headersFromResponse (response) {
   const headers = {};
   if (response.headers.entries) {
-    for (const pair of response.headers.entries()) {
-      const key = pair[0];
-      const value = pair[1];
-      if (headers[key]) {
-        if (!_.isArray(headers[key])) {
-          headers[key] = [headers[key]];
-        }
-        headers[key].push(value);
-      } else {
+    const headerKeys = response.headers.keys();
+    Array.from(headerKeys).forEach((key) => {
+      const value = response.headers.getAll(key);
+      if (value.count > 1) {
         headers[key] = value;
+      } else {
+        headers[key] = value[0];
       }
-    }
+    });
   } else if (response.headers.map) {
-    for (const i in response.headers.map) {
-      if (response.headers.map.hasOwnProperty(i)) {
-        const value = response.headers.map[i];
-        if (value.length > 1) {
-          headers[i] = value;
-        } else {
-          headers[i] = value[0];
-        }
+    const mapKeys = Object.keys(response.headers.map);
+    mapKeys.forEach((i) => {
+      const value = response.headers.map[i];
+      if (value.length > 1) {
+        headers[i] = value;
+      } else {
+        headers[i] = value[0];
       }
-    }
+    });
   }
   return headers;
 }

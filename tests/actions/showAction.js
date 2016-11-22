@@ -1,8 +1,8 @@
-import showAction from '../../src/actions/showAction';
-import DataManager from '../../src/DataManager';
 import 'whatwg-fetch';
 import fetchMock from 'fetch-mock';
 import expect from 'expect';
+import showAction from '../../src/actions/showAction';
+import DataManager from '../../src/DataManager';
 
 describe('showAction', function () {
   beforeEach(function () {
@@ -11,7 +11,7 @@ describe('showAction', function () {
   });
 
   it('should do GET request to /models/1 with id of 1', function () {
-    fetchMock.mock('/model/1', 'GET', { id: 1, name: 'hi' });
+    fetchMock.get('/model/1', { id: 1, name: 'hi' });
     const state = showAction(this.dataManager, {
       path: '/model',
       id: 1,
@@ -21,7 +21,7 @@ describe('showAction', function () {
   });
 
   it('should do set .data for state that returns', function (done) {
-    fetchMock.mock('/model/1', 'GET', { id: 1, name: 'hi' });
+    fetchMock.get('/model/1', { id: 1, name: 'hi' });
     showAction(this.dataManager, {
       path: '/model',
       id: 1,
@@ -55,7 +55,7 @@ describe('showAction', function () {
     }, '/model');
 
 
-    fetchMock.mock('/model/1', 'GET', { id: 1, name: 'hi' });
+    fetchMock.get('/model/1', { id: 1, name: 'hi' });
     showAction(this.dataManager, {
       path: '/model',
       id: 1,
@@ -65,7 +65,7 @@ describe('showAction', function () {
   });
 
   it('should do set byId equiv for state in dataManager', function (done) {
-    fetchMock.mock('/model/1', 'GET', { id: 1, name: 'hi' });
+    fetchMock.get('/model/1', { id: 1, name: 'hi' });
     showAction(this.dataManager, {
       path: '/model',
       id: 1,

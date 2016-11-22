@@ -14,21 +14,19 @@ function processAddition (modelData, dataManager, options) {
   if (options.invalidate) {
     const stateKey = stateKeyFromOptions(options);
     dataManager.setStateForKey(undefined, stateKey);
-  } else {
-    if (id) {
-      updateShowStateForOptions(dataManager, Object.assign(createInitialFetchState(), {
-        data: modelData,
-        fetchDate: new Date(),
-        isFetching: false,
-        status: 200,
-      }), options, id);
-    }
+  } else if (id) {
+    updateShowStateForOptions(dataManager, Object.assign(createInitialFetchState(), {
+      data: modelData,
+      fetchDate: new Date(),
+      isFetching: false,
+      status: 200,
+    }), options, id);
   }
 }
 
 function performRequest (data, dataManager, options) {
   const fetchURL = buildRequestPath(options);
-  return fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
+  return window.fetch(fetchURL, Object.assign({}, getFetchConfiguration(), {
     method: 'POST',
     body: JSON.stringify(data),
   })).then((response) => {

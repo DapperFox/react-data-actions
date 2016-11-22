@@ -15,7 +15,7 @@ describe('createAction', function () {
   });
 
   it('should performRequest POST to /models', function () {
-    fetchMock.mock('/model', 'POST', { id: 1, name: 'hi' });
+    fetchMock.post('/model', { id: 1, name: 'hi' });
     const action = createAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -26,7 +26,7 @@ describe('createAction', function () {
   });
 
   it('should NOT performRequest POST to /models performRequest is false', function () {
-    fetchMock.mock('/model', 'POST', { id: 1, name: 'hi' });
+    fetchMock.post('/model', { id: 1, name: 'hi' });
     const action = createAction(this.dataManager, {
       path: '/model',
       performRequest: false,
@@ -37,7 +37,7 @@ describe('createAction', function () {
   });
 
   it('should store response state /models', function () {
-    fetchMock.mock('/model', 'POST', { id: 1, name: 'hi' });
+    fetchMock.post('/model', { id: 1, name: 'hi' });
     const action = createAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -51,7 +51,7 @@ describe('createAction', function () {
   });
 
   it('should store response state /models with full replacement', function () {
-    fetchMock.mock('/model', 'POST', { id: 1, name: 'hi', post: 2 });
+    fetchMock.post('/model', { id: 1, name: 'hi', post: 2 });
     const action = createAction(this.dataManager, {
       path: '/model',
       performRequest: true,
@@ -67,7 +67,7 @@ describe('createAction', function () {
   });
 
   it('action promise should resolve with newest copy of model', function () {
-    fetchMock.mock('/model', 'POST', { id: 1, name: 'hi', post: 2 });
+    fetchMock.post('/model', { id: 1, name: 'hi', post: 2 });
     const action = createAction(this.dataManager, {
       path: '/model',
       performRequest: true,

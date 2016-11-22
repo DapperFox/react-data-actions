@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   buildCacheKeyFromOptions,
   existingStateForKey,
@@ -6,7 +7,6 @@ import {
   updateShowStateForOptions,
   createInitialFetchState,
 } from '../helpers/';
-import _ from 'lodash';
 
 export default function appendIndexAction (dataManager, options) {
   const stateKey = stateKeyFromOptions(options);

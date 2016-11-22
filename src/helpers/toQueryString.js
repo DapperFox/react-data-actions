@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 export default function toQueryString (hash = {}) {
   return _.map(hash, (value, key) => {
     if (_.isArray(value)) {
