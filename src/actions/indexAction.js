@@ -29,37 +29,39 @@ function processResponseFailure (response, dataManager, options) {
 }
 
 async function processResponse (response, dataManager, options) {
-  try {
-    const responseJSON = await response.json();
-    if (response.ok) {
-      const headers = headersFromResponse(response);
-      if (_.isArray(responseJSON)) {
-        responseJSON.forEach((mo) => {
-          const id = mo[options.idAttribute || 'id'];
-          if (id) {
-            updateShowStateForOptions(dataManager, {
-              data: mo,
-              isFetching: false,
-              hasError: false,
-              fetchDate: new Date(),
-              status: response.status,
-              headers,
-            }, options, id, true);
-          }
-        });
-      }
-      updateIndexStateForOptions(dataManager, {
-        data: responseJSON,
-        isFetching: false,
-        hasError: false,
-        fetchDate: new Date(),
-        status: response.status,
-        headers,
-      }, options);
-    } else {
+  if (response.ok) {
+    const headers = headersFromResponse(response);
+    let responseJSON;
+    try {
+      responseJSON = await response.json();
+    } catch (e) {
       processResponseFailure(response, dataManager, options);
+      return;
     }
-  } catch (e) {
+    if (_.isArray(responseJSON)) {
+      responseJSON.forEach((mo) => {
+        const id = mo[options.idAttribute || 'id'];
+        if (id) {
+          updateShowStateForOptions(dataManager, {
+            data: mo,
+            isFetching: false,
+            hasError: false,
+            fetchDate: new Date(),
+            status: response.status,
+            headers,
+          }, options, id, true);
+        }
+      });
+    }
+    updateIndexStateForOptions(dataManager, {
+      data: responseJSON,
+      isFetching: false,
+      hasError: false,
+      fetchDate: new Date(),
+      status: response.status,
+      headers,
+    }, options);
+  } else {
     processResponseFailure(response, dataManager, options);
   }
 }

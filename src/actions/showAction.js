@@ -25,22 +25,24 @@ function processResponseFailure (response, dataManager, options, id) {
 }
 
 async function processResponse (response, dataManager, options, id) {
-  try {
-    const responseJSON = await response.json();
-    if (response.ok) {
-      const headers = headersFromResponse(response);
-      updateShowStateForOptions(dataManager, {
-        data: responseJSON,
-        fetchDate: new Date(),
-        hasError: false,
-        isFetching: false,
-        status: response.status,
-        headers,
-      }, options, id);
-    } else {
+  if (response.ok) {
+    let responseJSON;
+    try {
+      responseJSON = await response.json();
+    } catch (e) {
       processResponseFailure(response, dataManager, options, id);
+      return;
     }
-  } catch (e) {
+    const headers = headersFromResponse(response);
+    updateShowStateForOptions(dataManager, {
+      data: responseJSON,
+      fetchDate: new Date(),
+      hasError: false,
+      isFetching: false,
+      status: response.status,
+      headers,
+    }, options, id);
+  } else {
     processResponseFailure(response, dataManager, options, id);
   }
 }
