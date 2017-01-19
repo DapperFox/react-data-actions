@@ -16,7 +16,6 @@ describe('connect', function () {
       static connectedActions () {
         return {};
       }
-
       render () {
         return <div className="base">base</div>;
       }
@@ -99,6 +98,41 @@ describe('connect', function () {
     expect(component).toEqual('<div class="one">hello</div>');
   });
 
+  it('it should set prop name in connected component when connectedActions are the second param to connect', function () {
+    class TestComponent extends React.Component {
+      render () {
+        return <div className={this.props.test}>{this.props.myPropName}</div>;
+      }
+    }
+    const ConnectedTestComponent = connect(TestComponent, (props) => {
+      return {
+        myPropName: function (dm) {
+          return 'hello';
+        },
+      };
+    });
+    const component = ReactDOMServer.renderToStaticMarkup(
+      <DataProvider dataManager={ this.dataManager }>
+        <ConnectedTestComponent test="one" />
+      </DataProvider>
+    );
+    expect(component).toEqual('<div class="one">hello</div>');
+  });
+
+  it('should not throw an exception when no attribute, but second param hash to connect is passed', function () {
+    function MyComponent () {
+      return <div>hi</div>;
+    }
+    const connectedActions = {};
+    const Connected = connect(MyComponent, connectedActions);
+    const component = ReactDOMServer.renderToStaticMarkup(
+      <DataProvider dataManager={ this.dataManager }>
+        <Connected test="one" />
+      </DataProvider>
+    );
+    expect(component).toEqual('<div>hi</div>');
+  });
+
   it('should throw an exception when no connectedActions are found', function () {
     function MyComponent () {
       return <div>hi</div>;
@@ -110,6 +144,8 @@ describe('connect', function () {
       err = e;
     }
     expect(err).toExist();
-    expect(err.message).toEqual('MyComponent is missing the required property connectedActions');
+    expect(err.message).toEqual(`connecting "MyComponent" failed.
+The component is missing the property connectedActions
+OR connect was not handed the connectedActions as a second parameter`);
   });
 });

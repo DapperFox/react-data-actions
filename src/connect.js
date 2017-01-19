@@ -2,10 +2,13 @@ import React from 'react';
 import _ from 'lodash';
 import { shallowCompareProps } from './helpers/';
 
-export default function connect (WrappedComponent) {
+export default function connect (WrappedComponent, actions = undefined) {
+  const connectedActions = actions || WrappedComponent.connectedActions;
   const name = WrappedComponent.displayName || WrappedComponent.name || 'AnonymousComponent';
-  if (WrappedComponent.connectedActions === undefined) {
-    throw new Error(`${name} is missing the required property connectedActions`);
+  if (connectedActions === undefined) {
+    throw new Error(`connecting "${name}" failed.
+The component is missing the property connectedActions
+OR connect was not handed the connectedActions as a second parameter`);
   }
   class ConnectedComponent extends React.Component {
 
@@ -40,7 +43,7 @@ export default function connect (WrappedComponent) {
 
     setupData (nextProps) {
       this.updateDataRequirements(nextProps);
-      const newState = Object.assign({}, this.getConnectedData());
+      const newState = { ...this.getConnectedData() };
       if (!this.state || !shallowCompareProps(newState, this.state)) {
         if (!this.state) {
           this.state = newState;
@@ -61,15 +64,10 @@ export default function connect (WrappedComponent) {
     }
 
     getConnectedActions (nextProps) {
-      const connectedActions = WrappedComponent.connectedActions;
-      if (connectedActions) {
-        if (typeof connectedActions === 'function') {
-          return connectedActions.call(undefined, Object.assign({}, nextProps || {}));
-        } else {
-          return connectedActions;
-        }
+      if (typeof connectedActions === 'function') {
+        return connectedActions.call(undefined, nextProps);
       }
-      return undefined;
+      return connectedActions;
     }
 
     render () {
