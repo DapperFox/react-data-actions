@@ -98,4 +98,18 @@ describe('connect', function () {
     );
     expect(component).toEqual('<div class="one">hello</div>');
   });
+
+  it('should throw an exception when no connectedActions are found', function () {
+    function MyComponent () {
+      return <div>hi</div>;
+    }
+    let err;
+    try {
+      const Connected = connect(MyComponent);
+    } catch (e) {
+      err = e;
+    }
+    expect(err).toExist();
+    expect(err.message).toEqual('MyComponent is missing the required property connectedActions');
+  });
 });

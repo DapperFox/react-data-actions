@@ -3,6 +3,10 @@ import _ from 'lodash';
 import { shallowCompareProps } from './helpers/';
 
 export default function connect (WrappedComponent) {
+  const name = WrappedComponent.displayName || WrappedComponent.name || 'AnonymousComponent';
+  if (WrappedComponent.connectedActions === undefined) {
+    throw new Error(`${name} is missing the required property connectedActions`);
+  }
   class ConnectedComponent extends React.Component {
 
     constructor (props, context) {
@@ -80,7 +84,7 @@ export default function connect (WrappedComponent) {
       }
     }
   }
-  ConnectedComponent.displayName = `connect(${WrappedComponent.displayName || WrappedComponent.name})`;
+  ConnectedComponent.displayName = `connect(${name})`;
   ConnectedComponent.contextTypes = {
     dataManager: React.PropTypes.object.isRequired,
   };
