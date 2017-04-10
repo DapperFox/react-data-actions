@@ -75,6 +75,7 @@
     "whatwg-fetch": "^2.0.1"
   },
   "dependencies": {
-    "lodash": "~4.17.2"
+    "lodash": "~4.17.2",
+    "query-string": "^4.3.2"
   }
 }

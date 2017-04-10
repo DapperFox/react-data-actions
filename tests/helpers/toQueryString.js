@@ -15,11 +15,11 @@ describe('#toQueryString', function () {
       hello: 'world',
     })).toEqual('hello=world');
   });
-  it('should encode multiple with ampersand between', function () {
+  it('should encode multiple with ampersand between sorted', function () {
     expect(toQueryString({
       hello: 'world',
       basic: 'params',
-    })).toEqual('hello=world&basic=params');
+    })).toEqual('basic=params&hello=world');
   });
   it('should encode array with ampersand between', function () {
     expect(toQueryString({
