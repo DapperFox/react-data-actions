@@ -1,5 +1,7 @@
-import queryString from 'query-string';
+import queryString from 'qs';
 
 export default function toQueryString (hash = {}) {
-  return queryString.stringify(hash, {arrayFormat: 'bracket'});
+  return queryString.stringify(hash, {
+    arrayFormat: 'brackets',
+  });
 }
