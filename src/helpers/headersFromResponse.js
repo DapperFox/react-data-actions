@@ -2,7 +2,7 @@ function getHeadersFromEntries (responseHeaders) {
   const headerKeys = responseHeaders.keys();
   const headers = {};
   Array.from(headerKeys).forEach((key) => {
-    const value = responseHeaders.getAll ? responseHeaders.getAll(key) : responseHeaders.get(key);
+    const value = typeof responseHeaders.getAll === 'function' ? responseHeaders.getAll(key) : responseHeaders.get(key);
     if (value.count > 1) {
       headers[key] = value;
     } else {
